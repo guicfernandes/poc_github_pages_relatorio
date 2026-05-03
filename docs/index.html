@@ -8,7 +8,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
+  /* ─── LIGHT THEME (default) ─── */
   :root {
+    --bg: #f7f6f2;
+    --bg2: #ffffff;
+    --bg3: #f0ede6;
+    --border: rgba(0,0,0,0.08);
+    --green: #16a34a;
+    --green-dim: rgba(22,163,74,0.10);
+    --amber: #b45309;
+    --amber-dim: rgba(180,83,9,0.10);
+    --red: #dc2626;
+    --red-dim: rgba(220,38,38,0.10);
+    --blue: #2563eb;
+    --blue-dim: rgba(37,99,235,0.10);
+    --text: #1a1a1a;
+    --text-dim: #6b7280;
+    --accent: #16a34a;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
+    --shadow-hover: 0 4px 12px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.06);
+  }
+
+  /* ─── DARK THEME ─── */
+  [data-theme="dark"] {
     --bg: #0d0f14;
     --bg2: #13161e;
     --bg3: #1a1e29;
@@ -24,7 +46,31 @@
     --text: #e8e8e8;
     --text-dim: #7a7f8e;
     --accent: #a78bfa;
+    --shadow: none;
+    --shadow-hover: none;
   }
+
+  /* ─── THEME TOGGLE BUTTON ─── */
+  .theme-toggle {
+    position: fixed;
+    top: 20px; right: 20px;
+    z-index: 999;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 6px 14px 6px 10px;
+    display: flex; align-items: center; gap: 7px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-dim);
+    box-shadow: var(--shadow);
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .theme-toggle:hover { color: var(--text); box-shadow: var(--shadow-hover); }
+  .theme-toggle-icon { font-size: 15px; line-height: 1; }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -34,6 +80,7 @@
     color: var(--text);
     min-height: 100vh;
     overflow-x: hidden;
+    transition: background 0.3s, color 0.3s;
   }
 
   /* ─── HEADER ─── */
@@ -47,8 +94,11 @@
     position: absolute;
     top: -80px; right: -80px;
     width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(22,163,74,0.06) 0%, transparent 70%);
     pointer-events: none;
+  }
+  [data-theme="dark"] header::before {
+    background: radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 70%);
   }
   .header-top {
     display: flex;
@@ -65,7 +115,7 @@
   }
   .brand-icon {
     width: 44px; height: 44px;
-    background: linear-gradient(135deg, var(--accent), #60a5fa);
+    background: linear-gradient(135deg, var(--accent), var(--blue));
     border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
     font-size: 20px;
@@ -75,7 +125,7 @@
     font-size: 22px;
     font-weight: 600;
     letter-spacing: -0.3px;
-    color: #fff;
+    color: var(--text);
   }
   .brand-sub {
     font-size: 12px;
@@ -128,7 +178,7 @@
   }
   .store-tab:hover { color: var(--text); }
   .store-tab.active {
-    color: #fff;
+    color: var(--text);
     border-bottom-color: var(--accent);
   }
 
@@ -153,7 +203,7 @@
     transition: all 0.2s;
     letter-spacing: 0.3px;
   }
-  .month-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+  .month-btn:hover { border-color: var(--text-dim); color: var(--text); }
   .month-btn.active {
     background: var(--accent);
     border-color: var(--accent);
@@ -179,11 +229,13 @@
     padding: 24px;
     position: relative;
     overflow: hidden;
-    transition: border-color 0.2s, transform 0.2s;
+    box-shadow: var(--shadow);
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
   }
   .kpi-card:hover {
-    border-color: rgba(255,255,255,0.15);
+    border-color: var(--accent);
     transform: translateY(-1px);
+    box-shadow: var(--shadow-hover);
   }
   .kpi-card::before {
     content: '';
@@ -210,7 +262,7 @@
     font-family: 'Fraunces', serif;
     font-size: 28px;
     font-weight: 600;
-    color: #fff;
+    color: var(--text);
     letter-spacing: -1px;
     line-height: 1;
     margin-bottom: 6px;
@@ -253,12 +305,15 @@
     border-radius: 16px;
     padding: 28px;
     position: relative;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s;
   }
+  .chart-card:hover { box-shadow: var(--shadow-hover); }
   .chart-title {
     font-family: 'Fraunces', serif;
     font-size: 15px;
     font-weight: 600;
-    color: #fff;
+    color: var(--text);
     margin-bottom: 4px;
   }
   .chart-subtitle {
@@ -281,7 +336,7 @@
     font-family: 'Fraunces', serif;
     font-size: 18px;
     font-weight: 600;
-    color: #fff;
+    color: var(--text);
     margin-bottom: 4px;
   }
   .section-desc {
@@ -307,10 +362,11 @@
   }
   .dre-table thead th:first-child { text-align: left; }
   .dre-table tbody tr {
-    border-bottom: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid var(--border);
     transition: background 0.15s;
   }
-  .dre-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+  .dre-table tbody tr:hover { background: rgba(0,0,0,0.02); }
+  [data-theme="dark"] .dre-table tbody tr:hover { background: rgba(255,255,255,0.02); }
   .dre-table tbody td {
     padding: 9px 14px;
     text-align: right;
@@ -334,7 +390,7 @@
   }
   .dre-table tr.total-row td {
     font-weight: 600;
-    color: #fff;
+    color: var(--text);
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
     padding-top: 12px;
@@ -344,7 +400,7 @@
     font-family: 'Fraunces', serif;
     font-size: 15px;
     font-weight: 600;
-    color: #fff;
+    color: var(--text);
     border-top: 2px solid var(--accent);
     padding-top: 14px;
     padding-bottom: 14px;
@@ -388,7 +444,7 @@
   }
   .desp-bar-wrap {
     flex: 1;
-    background: rgba(255,255,255,0.05);
+    background: var(--bg3);
     border-radius: 4px;
     height: 8px;
     overflow: hidden;
@@ -427,9 +483,10 @@
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 18px;
-    transition: border-color 0.2s;
+    box-shadow: var(--shadow);
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .cmp-card:hover { border-color: rgba(255,255,255,0.15); }
+  .cmp-card:hover { border-color: var(--accent); box-shadow: var(--shadow-hover); }
   .cmp-store-id {
     font-size: 10px;
     font-weight: 600;
@@ -451,7 +508,7 @@
     font-family: 'Fraunces', serif;
     font-size: 18px;
     font-weight: 600;
-    color: #fff;
+    color: var(--text);
     letter-spacing: -0.5px;
   }
   .cmp-pct-row {
@@ -511,6 +568,11 @@
 </head>
 <body>
 
+<button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
+  <span class="theme-toggle-icon">🌙</span>
+  <span id="themeLabel">Modo Escuro</span>
+</button>
+
 <header>
   <div class="header-top">
     <div class="brand">
@@ -550,7 +612,30 @@
 </footer>
 
 <script>
-// ─── DATA ───────────────────────────────────────────────────────────────────
+// ─── THEME ────────────────────────────────────────────────────────────────────
+function isDark() { return document.documentElement.getAttribute('data-theme') === 'dark'; }
+
+function toggleTheme() {
+  const dark = !isDark();
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  document.getElementById('themeLabel').textContent = dark ? 'Modo Claro' : 'Modo Escuro';
+  document.getElementById('themeBtn').querySelector('.theme-toggle-icon').textContent = dark ? '☀️' : '🌙';
+  localStorage.setItem('dre-theme', dark ? 'dark' : 'light');
+  // Re-render to apply theme-aware chart colors
+  render();
+}
+
+// Restore saved theme
+(function() {
+  const saved = localStorage.getItem('dre-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+  if (saved === 'dark') {
+    document.getElementById('themeLabel').textContent = 'Modo Claro';
+    document.getElementById('themeBtn').querySelector('.theme-toggle-icon').textContent = '☀️';
+  }
+})();
+
+
 const MONTHS = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 const MONTHS_FULL = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
@@ -683,38 +768,57 @@ function destroyCharts() {
 }
 
 // ─── CHART DEFAULTS ──────────────────────────────────────────────────────────
-Chart.defaults.color = '#7a7f8e';
+function getChartDefaults() {
+  const dark = isDark();
+  return {
+    textColor: dark ? '#7a7f8e' : '#6b7280',
+    gridColor: dark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)',
+    borderColor: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
+    bgCard: dark ? '#13161e' : '#ffffff',
+    tooltipBg: dark ? '#1a1e29' : '#ffffff',
+    tooltipBorder: dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.12)',
+    tooltipTitle: dark ? '#fff' : '#1a1a1a',
+    tooltipBody: dark ? '#9ca3af' : '#6b7280',
+    legendColor: dark ? '#9ca3af' : '#6b7280',
+  };
+}
+
 Chart.defaults.font.family = "'DM Sans', sans-serif";
 Chart.defaults.font.size = 11;
 Chart.defaults.plugins.legend.display = false;
 
 const CHART_COLORS = {
-  green: '#4ade80',
-  blue: '#60a5fa',
-  amber: '#fbbf24',
-  purple: '#a78bfa',
-  red: '#f87171',
-  stores: ['#60a5fa','#4ade80','#fbbf24','#a78bfa'],
+  green: '#16a34a',
+  blue: '#2563eb',
+  amber: '#b45309',
+  purple: '#7c3aed',
+  red: '#dc2626',
+  get stores() {
+    return isDark()
+      ? ['#60a5fa','#4ade80','#fbbf24','#a78bfa']
+      : ['#2563eb','#16a34a','#b45309','#7c3aed'];
+  }
 };
 
 function baseOptions(opts = {}) {
+  const cd = getChartDefaults();
   return {
     responsive: true,
     maintainAspectRatio: false,
     plugins: { legend: { display: false }, tooltip: {
-      backgroundColor: '#1a1e29',
-      borderColor: 'rgba(255,255,255,0.1)',
+      backgroundColor: cd.tooltipBg,
+      borderColor: cd.tooltipBorder,
       borderWidth: 1,
       padding: 10,
-      titleColor: '#fff',
-      bodyColor: '#9ca3af',
+      titleColor: cd.tooltipTitle,
+      bodyColor: cd.tooltipBody,
       callbacks: {
         label: ctx => '  ' + fmtShort(ctx.parsed.y ?? ctx.parsed),
       }
     }},
     scales: {
-      x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7a7f8e' }, border: { color: 'rgba(255,255,255,0.08)' } },
-      y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7a7f8e', callback: v => fmtShort(v) }, border: { color: 'rgba(255,255,255,0.08)' } },
+      x: { grid: { color: cd.gridColor }, ticks: { color: cd.textColor }, border: { color: cd.borderColor } },
+      y: { grid: { color: cd.gridColor }, ticks: { color: cd.textColor, callback: v => fmtShort(v) }, border: { color: cd.borderColor } },
       ...opts.scales,
     },
     ...opts,
@@ -842,7 +946,7 @@ function renderOverview() {
         borderRadius: 4,
       }))
     },
-    options: { ...baseOptions(), plugins: { ...baseOptions().plugins, legend: { display: true, labels: { color: '#9ca3af', boxWidth: 12, font: { size: 11 } } } } }
+    options: { ...baseOptions(), plugins: { ...baseOptions().plugins, legend: { display: true, labels: { color: getChartDefaults().legendColor, boxWidth: 12, font: { size: 11 } } } } }
   });
 
   // Chart: Resultado por loja
@@ -863,7 +967,7 @@ function renderOverview() {
         fill: false,
       }))
     },
-    options: { ...baseOptions(), plugins: { ...baseOptions().plugins, legend: { display: true, labels: { color: '#9ca3af', boxWidth: 12, font: { size: 11 } } } } }
+    options: { ...baseOptions(), plugins: { ...baseOptions().plugins, legend: { display: true, labels: { color: getChartDefaults().legendColor, boxWidth: 12, font: { size: 11 } } } } }
   });
 
   // Chart: % MB
@@ -881,12 +985,12 @@ function renderOverview() {
     },
     options: {
       ...baseOptions({ scales: {
-        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7a7f8e' }, border: { color: 'rgba(255,255,255,0.08)' } },
-        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7a7f8e', callback: v => v + '%' }, border: { color: 'rgba(255,255,255,0.08)' } },
+        x: { grid: { color: getChartDefaults().gridColor }, ticks: { color: getChartDefaults().textColor }, border: { color: getChartDefaults().borderColor } },
+        y: { grid: { color: getChartDefaults().gridColor }, ticks: { color: getChartDefaults().textColor, callback: v => v + '%' }, border: { color: getChartDefaults().borderColor } },
       }}),
       plugins: {
         ...baseOptions().plugins,
-        legend: { display: true, labels: { color: '#9ca3af', boxWidth: 12, font: { size: 11 } } },
+        legend: { display: true, labels: { color: getChartDefaults().legendColor, boxWidth: 12, font: { size: 11 } } },
         tooltip: { callbacks: { label: ctx => '  ' + ctx.parsed.y.toFixed(1) + '%' } }
       }
     }
@@ -903,12 +1007,12 @@ function renderOverview() {
     type: 'doughnut',
     data: {
       labels: ['Pessoal','Ocupação','Vendas','Diversas'],
-      datasets: [{ data: [dp,do_,dv,dd], backgroundColor: [CHART_COLORS.blue+'cc', CHART_COLORS.amber+'cc', CHART_COLORS.green+'cc', CHART_COLORS.purple+'cc'], borderColor: '#13161e', borderWidth: 3 }]
+      datasets: [{ data: [dp,do_,dv,dd], backgroundColor: [CHART_COLORS.blue+'cc', CHART_COLORS.amber+'cc', CHART_COLORS.green+'cc', CHART_COLORS.purple+'cc'], borderColor: isDark() ? '#13161e' : '#ffffff', borderWidth: 3 }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: {
-        legend: { display: true, position: 'right', labels: { color: '#9ca3af', boxWidth: 12, padding: 16 } },
+        legend: { display: true, position: 'right', labels: { color: getChartDefaults().legendColor, boxWidth: 12, padding: 16 } },
         tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ': ' + fmtShort(ctx.parsed) + ' (' + (ctx.parsed / (dp+do_+dv+dd) * 100).toFixed(1) + '%)' } },
         backgroundColor: '#1a1e29',
       }
@@ -1136,7 +1240,7 @@ function renderStore(storeId) {
     },
     options: {
       ...baseOptions(),
-      plugins: { ...baseOptions().plugins, legend: { display: true, labels: { color: '#9ca3af', boxWidth: 12 } } }
+      plugins: { ...baseOptions().plugins, legend: { display: true, labels: { color: getChartDefaults().legendColor, boxWidth: 12 } } }
     }
   });
 
@@ -1211,12 +1315,12 @@ function renderStore(storeId) {
     },
     options: {
       ...baseOptions({ scales: {
-        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7a7f8e' }, border: { color: 'rgba(255,255,255,0.08)' } },
-        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7a7f8e', callback: v => v + '%' }, border: { color: 'rgba(255,255,255,0.08)' } },
+        x: { grid: { color: getChartDefaults().gridColor }, ticks: { color: getChartDefaults().textColor }, border: { color: getChartDefaults().borderColor } },
+        y: { grid: { color: getChartDefaults().gridColor }, ticks: { color: getChartDefaults().textColor, callback: v => v + '%' }, border: { color: getChartDefaults().borderColor } },
       }}),
       plugins: {
         ...baseOptions().plugins,
-        legend: { display: true, labels: { color: '#9ca3af', boxWidth: 12 } },
+        legend: { display: true, labels: { color: getChartDefaults().legendColor, boxWidth: 12 } },
         tooltip: { callbacks: { label: ctx => '  ' + ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + '%' } },
       }
     }
